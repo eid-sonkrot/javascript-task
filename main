@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quote Search</title>
+  <script>
+    // Function to fetch quote data from the API
+    function fetchQuotes() {
+      fetch('https://dummyjson.com/quotes')
+        .then(response => response.json())
+        .then(data => displayQuotes(data))
+        .catch(error => displayError());
+    }
+
+    // Function to display quotes
+    function displayQuotes(quotes) {
+      const quoteList = document.getElementById('quote-list');
+      quoteList.innerHTML = '';
+
+      quotes.forEach(quote => {
+        const listItem = document.createElement('li');
+        listItem.textContent = quote.text;
+        quoteList.appendChild(listItem);
+      });
+    }
+
+    // Function to filter quotes based on user input
+    function filterQuotes() {
+      const filterText = document.getElementById('filter-text').value.toLowerCase();
+      const quotes = document.querySelectorAll('#quote-list li');
+
+      quotes.forEach(quote => {
+        const quoteText = quote.textContent.toLowerCase();
+        if (quoteText.includes(filterText)) {
+          quote.style.display = 'block';
+        } else {
+          quote.style.display = 'none';
+        }
+      });
+    }
+
+    // Function to display error message
+    function displayError() {
+      const quoteList = document.getElementById('quote-list');
+      quoteList.innerHTML = '<li>Error loading quotes. Please try again later.</li>';
+    }
+  </script>
+</head>
+<body onload="fetchQuotes()">
+  <h1>Quote Search</h1>
+  <input type="text" id="filter-text" oninput="filterQuotes()" placeholder="Enter search text">
+  <ul id="quote-list"></ul>
+</body>
+</html>
